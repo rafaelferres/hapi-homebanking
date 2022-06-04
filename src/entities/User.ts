@@ -4,6 +4,7 @@ export class User {
     public readonly id: string;
     public email: string;
     public password: string;
+    public funds: number;
 
     /**
      * Construct user

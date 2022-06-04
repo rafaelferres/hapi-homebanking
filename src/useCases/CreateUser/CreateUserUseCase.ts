@@ -1,6 +1,7 @@
 import { User } from '@entities/User'
 import { IUsersRepository } from '@repositories/IUsersRepository'
 import { ICreateUserDTO } from './CreateUserDTO'
+import crypto from 'crypto'
 
 export class CreateUserUseCase {
   constructor (private userRepository: IUsersRepository) {}
@@ -12,7 +13,9 @@ export class CreateUserUseCase {
       throw new Error('User already exists.')
     }
 
-    const user = new User(data)
+    data.password = crypto.createHash('md5').update(data.password).digest('hex')
+
+    const user = new User({ ...data, funds: 0 })
 
     await this.userRepository.save(user)
   }

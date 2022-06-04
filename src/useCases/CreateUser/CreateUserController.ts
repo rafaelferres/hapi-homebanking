@@ -8,7 +8,6 @@ export class CreateUserController {
 
   public async handler (request: Hapi.Request, h: Hapi.ResponseToolkit) {
     const data : ICreateUserDTO = request.payload as any
-    console.log(this.createUserUseCase)
     try {
       await this.createUserUseCase.execute(data)
       return { created: true }

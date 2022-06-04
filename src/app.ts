@@ -1,9 +1,7 @@
 import Hapi from '@hapi/hapi'
-import HapiSwagger from 'hapi-swagger'
-import Inert from '@hapi/inert'
 import { routes } from './routes'
-import Vision from '@hapi/vision'
 import dotenv from 'dotenv'
+import Jwt from '@hapi/jwt'
 
 const swaggerOptions: any = {
   info: {
@@ -19,14 +17,34 @@ const init = async () => {
     host: '0.0.0.0'
   })
 
+  await server.register(Jwt)
+
   await server.register([
-    Inert,
-    Vision,
+    require('@hapi/inert'),
+    require('@hapi/vision'),
     {
-      plugin: HapiSwagger,
+      plugin: require('hapi-swagger'),
       options: swaggerOptions
     }
   ])
+
+  server.auth.strategy('jwt', 'jwt', {
+    keys: 'dwqdwqd',
+    verify: {
+      aud: 'urn:audience:homebanking',
+      iss: 'urn:issuer:homebanking',
+      sub: false,
+      nbf: false,
+      exp: true,
+      maxAgeSec: 14400
+    },
+    validate: (artifacts, request, h) => {
+      return {
+        isValid: true,
+        credentials: { user: artifacts.decoded.payload.id }
+      }
+    }
+  })
   routes(server)
   server.start()
 }

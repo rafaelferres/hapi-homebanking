@@ -1,8 +1,7 @@
-import { UsersRepositoryLocalFile } from '@repositories/implementations/UsersRepositoryLocalFile'
 import { CreateUserController } from './CreateUserController'
 import { CreateUserUseCase } from './CreateUserUseCase'
+import { usersRepositoryLocalFile } from '@repositories/implementations/UsersRepositoryLocalFile'
 
-const usersRepositoryLocalFile = new UsersRepositoryLocalFile()
 const createUserUseCase = new CreateUserUseCase(usersRepositoryLocalFile)
 const createUserController = new CreateUserController(createUserUseCase)
 

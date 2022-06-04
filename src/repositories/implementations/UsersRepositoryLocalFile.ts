@@ -4,15 +4,26 @@ import fs, { promises as fsPromise } from 'fs'
 
 import dotenv from 'dotenv'
 dotenv.config()
-export class UsersRepositoryLocalFile implements IUsersRepository {
+class UsersRepositoryLocalFile implements IUsersRepository {
     private users: User[] = []
 
     constructor () {
       this.createOrLoadFile()
     }
 
-    public login (email: string, password: string): Promise<User> {
-      throw new Error('Method not implemented.')
+    public async updateFunds (user: User, newFunds: number): Promise<void> {
+      user.funds = newFunds
+      await this.saveFile()
+    }
+
+    public findById (id: string): User | undefined {
+      const findUser = this.users.find(x => x.id === id)
+      return findUser
+    }
+
+    public login (email: string, password: string): User | undefined {
+      const findUser = this.users.find(x => x.email === email && x.password === password)
+      return findUser
     }
 
     public findByEmail (email: string): User | undefined {
@@ -38,7 +49,7 @@ export class UsersRepositoryLocalFile implements IUsersRepository {
       if (checkIfExistsFile) {
         const loadFileData = await fsPromise.readFile(process.env.USER_FILE)
         const usersLoaded: any[] = JSON.parse(loadFileData.toString())
-        this.users = usersLoaded.map(x => (new User({ email: x.email, password: x.password }, x.id)))
+        this.users = usersLoaded.map(x => (new User({ email: x.email, password: x.password, funds: x.funds }, x.id)))
       } else {
         await fsPromise.writeFile(process.env.USER_FILE, '[]')
       }
@@ -55,3 +66,7 @@ export class UsersRepositoryLocalFile implements IUsersRepository {
       await fsPromise.writeFile(process.env.USER_FILE, JSON.stringify(this.users))
     }
 }
+
+const usersRepositoryLocalFile = new UsersRepositoryLocalFile()
+
+export { usersRepositoryLocalFile }
