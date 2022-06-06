@@ -6,6 +6,9 @@ import { getFundsController } from '@useCases/GetFunds'
 import { putFundsController } from '@useCases/PutFunds'
 import { deleteFundsController } from '@useCases/DeleteFunds'
 
+/**
+ * Routes hapi
+ */
 export const routes = async (server: Hapi.Server): Promise<void> => {
   server.route([{
     method: 'POST',

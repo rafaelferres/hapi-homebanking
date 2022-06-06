@@ -1,5 +1,8 @@
 import * as uuid from 'uuid'
 
+/**
+ * User entity
+ */
 export class User {
     public readonly id: string;
     public email: string;

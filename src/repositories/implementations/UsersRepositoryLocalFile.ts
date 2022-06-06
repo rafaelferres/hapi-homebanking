@@ -4,6 +4,10 @@ import fs, { promises as fsPromise } from 'fs'
 
 import dotenv from 'dotenv'
 dotenv.config()
+
+/**
+ * Create, save and update data from file
+ */
 class UsersRepositoryLocalFile implements IUsersRepository {
     private users: User[] = []
 

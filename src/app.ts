@@ -10,6 +10,10 @@ const swaggerOptions: any = {
   }
 }
 
+/**
+ * Load hapi configurations
+ */
+
 const init = async () => {
   dotenv.config()
   const server = Hapi.server({
@@ -27,6 +31,20 @@ const init = async () => {
       options: swaggerOptions
     }
   ])
+
+  await server.register({
+    plugin: require('good'),
+    options: {
+      ops: {
+        interval: 1000
+      },
+      reporters: {
+        console: [{
+          module: 'good-console'
+        }, 'stdout']
+      }
+    }
+  })
 
   server.auth.strategy('jwt', 'jwt', {
     keys: 'dwqdwqd',
