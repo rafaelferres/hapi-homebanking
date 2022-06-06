@@ -47,7 +47,7 @@ const init = async () => {
   })
 
   server.auth.strategy('jwt', 'jwt', {
-    keys: 'dwqdwqd',
+    keys: process.env.SECRET as string,
     verify: {
       aud: 'urn:audience:homebanking',
       iss: 'urn:issuer:homebanking',

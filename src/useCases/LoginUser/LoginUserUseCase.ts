@@ -19,7 +19,7 @@ export class LoginUserUseCase {
   }
 
   private generateToken (user: User) {
-    const jwtSecret = 'dwqdwqd'
+    const jwtSecret = process.env.SECRET as string
     const jwtExpiration = 14400
     const payload = { id: user.id }
 
